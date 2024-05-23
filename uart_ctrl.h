@@ -4,7 +4,7 @@ void jsonCmdReceiveHandler(){
 	case CMD_DDSM_STOP:
                 ddsm_stop(
 								jsonCmdReceive["id"]);break;
-	case CMD_DDSM_SPEED_CTRL:
+	case CMD_DDSM_CTRL:
                 ddsm_ctrl(
 								jsonCmdReceive["id"],
 								jsonCmdReceive["cmd"],
@@ -27,6 +27,52 @@ void jsonCmdReceiveHandler(){
   case CMD_TYPE:
                 set_ddsm_type(
                 jsonCmdReceive["type"]);break;
+
+
+  // === === === wifi settings. === === ===
+  // wifi settings.
+  case CMD_WIFI_ON_BOOT: 
+                        configWifiModeOnBoot(
+                        jsonCmdReceive["cmd"]
+                        );break;
+  case CMD_SET_AP:      wifiModeAP(
+                        jsonCmdReceive["ssid"],
+                        jsonCmdReceive["password"]
+                        );break;
+  case CMD_SET_STA:     wifiModeSTA(
+                        jsonCmdReceive["ssid"],
+                        jsonCmdReceive["password"]
+                        );break;
+  case CMD_WIFI_APSTA:  wifiModeAPSTA(
+                        jsonCmdReceive["ap_ssid"],
+                        jsonCmdReceive["ap_password"],
+                        jsonCmdReceive["sta_ssid"],
+                        jsonCmdReceive["sta_password"]
+                        );break;
+  case CMD_WIFI_INFO:   wifiStatusFeedback();break;
+  case CMD_WIFI_CONFIG_CREATE_BY_STATUS: 
+                        createWifiConfigFileByStatus();break;
+  case CMD_WIFI_CONFIG_CREATE_BY_INPUT: 
+                        createWifiConfigFileByInput(
+                        jsonCmdReceive["mode"],
+                        jsonCmdReceive["ap_ssid"],
+                        jsonCmdReceive["ap_password"],
+                        jsonCmdReceive["sta_ssid"],
+                        jsonCmdReceive["sta_password"]
+                        );break;
+  case CMD_WIFI_STOP:   wifiStop();break;
+
+
+  // esp-32 dev ctrl.
+  case CMD_REBOOT:      esp_restart();break;
+  case CMD_FREE_FLASH_SPACE:
+                        freeFlashSpace();break;
+  case CMD_RESET_WIFI_SETTINGS:
+                        deleteFile("wifiConfig.json");break;
+  case CMD_NVS_CLEAR:   nvs_flash_erase();
+                        delay(100);
+                        nvs_flash_init();
+                        break;
 	}
 }
 
@@ -63,34 +109,67 @@ void ddsm210_fb() {
     uint8_t data[10];
     Serial1.readBytes(data, 10);
 
+    // CRC-8/MAXIM
+    uint8_t crc = 0;
+    for (size_t i = 0; i < packet_length - 1; ++i) {
+      crc = crc8_update(crc, data[i]);
+    }
+    if (crc != data[9]){
+      jsonInfoSend.clear();
+      jsonInfoSend["T"] = FB_MOTOR;
+      jsonInfoSend["crc"] = 0;
+      String getInfoJsonString;
+      serializeJson(jsonInfoSend, getInfoJsonString);
+      Serial.println(getInfoJsonString);
+      return;
+    }
+
+    int feedback_type = data[1];
     uint8_t ID = data[0];
-    int fb_data = (data[2] << 8) | data[3];
-    if (fb_data & 0x8000) {
-      fb_data = -(0x10000 - fb_data);
+
+    if (feedback_type == 0x64) {
+      int speed_data = (data[2] << 8) | data[3];
+      if (speed_data & 0x8000) {
+        speed_data = -(0x10000 - speed_data);
+      }
+
+      int current = (data[4] << 8) | data[5];
+      if (current & 0x8000) {
+        current = -(0x10000 - current);
+      }
+
+      int acceleration_time = data[6];
+      int temperature = data[7];
+      int fault_code = data[8];
+
+      jsonInfoSend.clear();
+      jsonInfoSend["T"] = FB_MOTOR;
+      jsonInfoSend["id"]  = ID;
+      jsonInfoSend["typ"] = 210;
+      jsonInfoSend["spd"] = speed_data;
+      jsonInfoSend["crt"] = current;
+      jsonInfoSend["act"] = acceleration_time;
+      jsonInfoSend["tep"] = temperature;
+      jsonInfoSend["err"] = fault_code;
+      String getInfoJsonString;
+      serializeJson(jsonInfoSend, getInfoJsonString);
+      Serial.println(getInfoJsonString);
+    } else if (feedback_type == 0x74) {
+      int32_t mileage = (int32_t)((uint32_t)data[2] << 24 | (uint32_t)data[3] << 16 | (uint32_t)data[4] << 8 | (uint32_t)data[5]);
+      int ddsm_pos = (data[6] << 8) | data[7];
+      int fault_code = data[8];
+
+      jsonInfoSend.clear();
+      jsonInfoSend["T"] = FB_INFO;
+      jsonInfoSend["id"]  = ID;
+      jsonInfoSend["typ"] = 210;
+      jsonInfoSend["mil"] = mileage;
+      jsonInfoSend["pos"] = ddsm_pos;
+      jsonInfoSend["err"] = fault_code;
+      String getInfoJsonString;
+      serializeJson(jsonInfoSend, getInfoJsonString);
+      Serial.println(getInfoJsonString);
     }
-
-    int current = (data[4] << 8) | data[5];
-    if (current & 0x8000) {
-      current = -(0x10000 - current);
-    }
-
-    int acceleration_time = data[6];
-    int temperature = data[7];
-    int fault_code = data[8];
-    int crc = data[9];
-
-    jsonInfoSend.clear();
-    jsonInfoSend["T"] = FB_MOTOR;
-    jsonInfoSend["id"]  = ID;
-    jsonInfoSend["fb"] = fb_data;
-    jsonInfoSend["crt"] = current;
-    jsonInfoSend["act"] = acceleration_time;
-    jsonInfoSend["tep"] = temperature;
-    jsonInfoSend["err"] = fault_code;
-    jsonInfoSend["crc"] = crc;
-    String getInfoJsonString;
-    serializeJson(jsonInfoSend, getInfoJsonString);
-    Serial.println(getInfoJsonString);
   }
 }
 
@@ -151,9 +230,9 @@ void ddsm115_fb() {
       print_packet(data, 10);
     } else {
       int ddsm_pos = (data[6] << 8) | data[7];
-      if (ddsm_pos & 0x8000) {
-        ddsm_pos = -(0x10000 - ddsm_pos);
-      }
+      // if (ddsm_pos & 0x8000) {
+      //   ddsm_pos = -(0x10000 - ddsm_pos);
+      // }
 
       int ddsm_error = data[8];
 
@@ -180,6 +259,5 @@ void ddsm_fb() {
     ddsm115_fb();
   } else if (ddsm_type == TYPE_DDSM210) {
     ddsm210_fb();
-    Serial.println("210");
   }
 }

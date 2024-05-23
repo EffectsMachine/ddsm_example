@@ -1,12 +1,22 @@
+#include <nvs_flash.h>
+#include <esp_system.h>
+#include <LittleFS.h>
+#include <WiFi.h>
+#include <WebServer.h>
+
 #include <ArduinoJson.h>
 StaticJsonDocument<256> jsonCmdReceive;
 StaticJsonDocument<256> jsonInfoSend;
 
+int InfoPrint = 1;
+
 // device settings.
 #define DDSM_RX 18
 #define DDSM_TX 19
+
 #define SERIAL_BAUDRATE 115200
 #define DDSM_BAUDRATE 115200
+
 #define TIME_BETWEEN_CMD 4
 
 #define TYPE_DDSM115  1
@@ -15,7 +25,9 @@ StaticJsonDocument<256> jsonInfoSend;
 const size_t packet_length = 10;     
 uint8_t packet_move[packet_length] = {0x01, 0x64, 0xff, 0xce, 0x00, 0x00, 0x00, 0x00, 0x00, 0xda};
 
-int heartbeat_time_ms = 2000;
+// -1: off
+// 2000: ddsm stops when there is no new cmd received in the past 2000ms.
+int heartbeat_time_ms = -1;
 unsigned long prev_time = millis();
 bool stop_flag = false;
 
@@ -60,7 +72,19 @@ void clear_ddsm_buffer() {
 }
 
 
-// ddsm speed ctrl (closed-loop)
+// --- DDSM115 ---
+// current loop, cmd: -32767 ~ 32767 -> -8 ~ 8 A (ddsm115 max current < 2.7A)
+// speed loop, cmd: -200 ~ 200 rpm
+// position loop, cmd: 0 ~ 32767 -> 0 ~ 360°
+
+// --- DDSM210 ---
+// open loop, cmd: -32767 ~ 32767
+// speed loop, cmd: -2100 ~ 2100 -> -210 ~ 210 rpm
+// position loop, cmd: 0 ~ 32767 -> 0 ~ 360°
+
+//    wherever the mode is set to position mode
+//    the currently position is the 0 position and it moves to the goal position
+//    at the direction as the shortest path.
 void ddsm_ctrl(uint8_t id, int cmd, uint8_t act) {
   packet_move[0] = id;
   packet_move[1] = 0x64;
@@ -86,6 +110,7 @@ void ddsm_ctrl(uint8_t id, int cmd, uint8_t act) {
 
 
 // change ddsm id
+// make sure there is only one ddsm connected
 void ddsm_change_id(uint8_t id) {
   packet_move[0] = 0xAA;
   
@@ -120,13 +145,12 @@ void ddsm_change_id(uint8_t id) {
 // 1 - current loop
 // 2 - speed loop
 // 3 - position loop
-// C8 64 00 00 00 00 00 00 00 DE
-// 01 A0 00 00 00 00 00 00 00 01
+
 // ddsm210:
 // 0 - open loop
 // 2 - speed loop
 // 3 - position loop
-// 
+
 void ddsm_change_mode(uint8_t id, uint8_t mode) {
   if (ddsm_type == TYPE_DDSM115) {
     packet_move[0] = id;
@@ -189,10 +213,15 @@ void ddsm_id_check() {
 // DDSM115 feedback:
 // 0  1    2        3        4       5       6    7  8     9 
 // ID MODE TORQUE_H TORQUE_L SPEED_H SPEED_L TEMP U8 ERROR CRC8
-void ddsm_get_info(uint8_t id) {
-  get_info_flag = true;
+void ddsm_get_info(uint8_t id) {  
   packet_move[0] = id;
+
+  if (ddsm_type == TYPE_DDSM115) {
+    get_info_flag = true;
+  }
+
   packet_move[1] = 0x74;
+
   packet_move[2] = 0x00;
   packet_move[3] = 0x00;
 
@@ -237,6 +266,9 @@ void set_ddsm_type(int inputType) {
 
 // heartbeat ctrl
 void heartbeat_ctrl() {
+  if (heartbeat_time_ms == -1) {
+    return;
+  }
   unsigned long curr_time = millis();
   if (curr_time - prev_time > heartbeat_time_ms && !stop_flag) {
     ddsm_stop(1);
@@ -256,19 +288,47 @@ void heartbeat_ctrl() {
 // json cmds.
 #include "json_cmd.h"
 
+// functions for editing the files in flash.
+#include "files_ctrl.h"
+
+// functions for wifi ctrl.
+#include "wifi_ctrl.h"
+
 // uart ctrl funcs.
 #include "uart_ctrl.h"
+
+// functions for http & web server.
+#include "http_server.h"
 
 
 void setup() {
   Serial.begin(SERIAL_BAUDRATE);
   Serial1.begin(DDSM_BAUDRATE, SERIAL_8N1, DDSM_RX, DDSM_TX);
+  
+  // Initialize LittleFS for Flash files ctrl.
+  initFS();
+
+  // clear ddsm buffer.
   clear_ddsm_buffer();
+  
+  // wifi init.
+  initWifi();
+
+  // http & web init.
+  initHttpWebServer();
 }
 
 
 void loop() {
+  // heartbeat function.
   heartbeat_ctrl();
-  ddsm115_fb();
+
+  // recving data from ddsm.
+  ddsm_fb();
+
+  // recving the json cmd from uart.
   serialCtrl();
+
+  // recving the json cmd form http requests.
+  server.handleClient();
 }

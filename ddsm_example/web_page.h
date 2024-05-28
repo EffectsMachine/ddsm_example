@@ -352,6 +352,13 @@ const char index_html[] PROGMEM = R"rawliteral(
                             </div>
                             <div class="info-box json-cmd-info">
                                 <div>
+                                    <p>CMD_DDSM_CTRL</p>
+                                    <p class="cmd-value">{"T":10010,"id":1,"cmd":50,"act":3}</p>
+                                </div>
+                                <button class="w-btn">INPUT</button>
+                            </div>
+                            <div class="info-box json-cmd-info">
+                                <div>
                                     <p>CMD_DDSM_CHANGE_ID</p>
                                     <p class="cmd-value">{"T":10011,"id":1}</p>
                                 </div>

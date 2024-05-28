@@ -26,7 +26,7 @@
 #define CMD_CHANGE_MODE	10012
 
 
-// {"T":10031} - [ok]
+// {"T":10031}
 // get id from ddsm 115
 // there must be only one ddsm connected
 // when you check

@@ -59,7 +59,7 @@ Our provided examples can be directly uploaded and run on the `DDSM Driver HAT(A
 - Use `CMD_DDSM_INFO` to get additional feedback information.
 
 # Wired Control Using JSON Commands
-The methods described above use the web application. This section explains how to control the driver board and hub motor via a wired connection. Use a Raspberry Pi, Jetson, PC, or any device with a USB interface for serial communication. Connect the device to the driver board with a USB cable and ensure the "Serial Control Switch" is set to the ESP32 position.
+The methods described above use the web application. This section explains how to control the driver board and hub motor via a wired connection. Use a Raspberry Pi, Jetson, PC, or any device with a USB interface for serial communication. Connect the device to the driver board with a USB cable(using the port labeled `ESP32-USB` on the driver board) and ensure the "Serial Control Switch" is set to the ESP32 position
 
 Here’s how to use a simple serial terminal to control the motor (Python script control is covered later):
 - Download a serial terminal tool.
@@ -68,13 +68,29 @@ Here’s how to use a simple serial terminal to control the motor (Python script
 - The functionality of the JSON commands is the same as described in the web application section.
 
 # Controlling with Python Scripts
-You can control the hub motor by running Python scripts on your host device. These scripts can be used on any device that supports Python and serial communication, such as a Windows PC, Raspberry Pi, or Jetson Orin. Adjust the serial device name parameter according to your setup. For example, if the serial device name is /dev/ttyUSB0, run the Python script with the following command:
+You can control the hub motor by running Python scripts on your host device. These scripts can be used on any device that supports Python and serial communication, such as a Windows PC, Raspberry Pi, or Jetson Orin. Adjust the serial device name parameter according to your setup. Connect the `DDSM Driver HAT(A)` to your computer via USB (using the port labeled `ESP32-USB` on the driver board). For example, if the serial device name is /dev/ttyUSB0, run the Python script with the following command:
 
     python serial_simple_ctrl.py /dev/ttyUSB0
 
 Then, you can enter JSON format commands in the terminal and press Enter to communicate with the DDSM Driver HAT(A). For instance, to obtain the ID of the currently connected motor (ensure only one motor is connected), you can send:
 
     {"T":10031}
+
+# Quick Factory Reset
+If you have uploaded other examples to the `DDSM Driver HAT(A)`, the original factory examples will be replaced. To restore the driver board to its factory settings, connect the `DDSM Driver HAT(A)` to your computer via USB (using the port labeled `ESP32-USB` on the driver board). Then, follow these steps:
+- Extract the `ddsm_example_downloader.zip` file.
+- Run `flash_download_tool_3.9.5.exe`.
+- Select `ESP32` for `ChipType` and `Factory` for `WorkMode`, then click `OK`.
+- In any of the Download Panels, select the appropriate `COM port`. Do not change any other parameters.
+- After selecting the COM port, click `START`.
+- Wait until the process shows `FINISH`.
+- Fully power off the `DDSM Driver HAT(A)`` and then power it back on.
+The `DDSM Driver HAT(A)`` will now be restored to its original factory examples.
+
+# Important Notes
+For most users, when controlling the motor via JSON commands or the web application, the ESP32 is used to generate control commands for the DDSM motor and convert feedback data into a human-readable format. Ensure that the "Serial Control Switch" is set to the `ESP32` position to maintain proper communication between the ESP32 and the DDSM motor. If you need to use USB communication in this mode, connect via the Type-C port labeled `ESP32-USB`.
+
+For advanced users who want to develop their own motor control SDK based on the DDSM motor documentation, you can switch the "Serial Control Switch" to the `USB` position. In this mode, use the Type-C port labeled `USB` to communicate with other devices. This Type-C port communicates directly with the DDSM motor.
 
 
 # License

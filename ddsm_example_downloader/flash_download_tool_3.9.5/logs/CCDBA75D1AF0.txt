@@ -1,0 +1,256 @@
+*************************** START ****************************
+START TIME: 202307291122
+CONNECT BAUD: 115200
+set state: ESP_DL_SYNC
+serial port opened
+-----------
+baud:115200
+root baud:115200
+-------------
+===============BAUD : 115200===============CALL DEVICE SYNC
+connecting...
+mac l: 0xa75d1af0
+mac h: 0xf7ccdb
+crc_cal: 247
+crc_read: 247
+crc_test: 0
+ESP32 MAC CRC OK
+get mac res: 1
+get flash id : 0x00164020
+manufacturer_id: 0x20
+device_id: 0x4016
+Wrote 17104 bytes (11191 compressed) at 0x00001000 in 1.3 seconds (effective 109.4 kbit/s)...
+Hash of data verified.Wrote 3072 bytes (122 compressed) at 0x00008000 in 0.1 seconds (effective 420.4 kbit/s)...
+Hash of data verified.Wrote 8192 bytes (47 compressed) at 0x0000e000 in 0.1 seconds (effective 635.4 kbit/s)...
+Hash of data verified.Wrote 830656 bytes (465035 compressed) at 0x00010000 in 40.9 seconds (effective 162.4 kbit/s)...
+Hash of data verified.
+Leaving...
+com closed
+Use time: 44 s
+Download result: PASS
+*************************** END ****************************
+
+*************************** START ****************************
+START TIME: 202307291129
+CONNECT BAUD: 115200
+set state: ESP_DL_SYNC
+serial port opened
+-----------
+baud:115200
+root baud:115200
+-------------
+===============BAUD : 115200===============CALL DEVICE SYNC
+connecting...
+mac l: 0xa75d1af0
+mac h: 0xf7ccdb
+crc_cal: 247
+crc_read: 247
+crc_test: 0
+ESP32 MAC CRC OK
+get mac res: 1
+get flash id : 0x00164020
+manufacturer_id: 0x20
+device_id: 0x4016
+Wrote 18656 bytes (12052 compressed) at 0x00001000 in 0.4 seconds (effective 364.6 kbit/s)...
+Hash of data verified.Wrote 3072 bytes (122 compressed) at 0x00008000 in 0.0 seconds (effective 509.8 kbit/s)...
+Hash of data verified.Wrote 8192 bytes (47 compressed) at 0x0000e000 in 0.1 seconds (effective 686.2 kbit/s)...
+Hash of data verified.Wrote 830656 bytes (465035 compressed) at 0x00010000 in 9.1 seconds (effective 731.9 kbit/s)...
+Hash of data verified.
+Leaving...
+com closed
+Use time: 12 s
+Download result: PASS
+*************************** END ****************************
+
+*************************** START ****************************
+START TIME: 202307291130
+CONNECT BAUD: 115200
+set state: ESP_DL_SYNC
+serial port opened
+-----------
+baud:115200
+root baud:115200
+-------------
+===============BAUD : 115200===============CALL DEVICE SYNC
+connecting...
+mac l: 0xa75d1af0
+mac h: 0xf7ccdb
+crc_cal: 247
+crc_read: 247
+crc_test: 0
+ESP32 MAC CRC OK
+get mac res: 1
+get flash id : 0x00164020
+manufacturer_id: 0x20
+device_id: 0x4016
+Wrote 18656 bytes (12052 compressed) at 0x00001000 in 0.4 seconds (effective 367.7 kbit/s)...
+Hash of data verified.Wrote 3072 bytes (122 compressed) at 0x00008000 in 0.0 seconds (effective 503.1 kbit/s)...
+Hash of data verified.Wrote 8192 bytes (47 compressed) at 0x0000e000 in 0.1 seconds (effective 683.6 kbit/s)...
+Hash of data verified.Wrote 830656 bytes (465035 compressed) at 0x00010000 in 9.1 seconds (effective 732.1 kbit/s)...
+Hash of data verified.
+Leaving...
+com closed
+Use time: 12 s
+Download result: PASS
+*************************** END ****************************
+
+*************************** START ****************************
+START TIME: 202307291131
+CONNECT BAUD: 115200
+set state: ESP_DL_SYNC
+serial port opened
+-----------
+baud:115200
+root baud:115200
+-------------
+===============BAUD : 115200===============CALL DEVICE SYNC
+connecting...
+mac l: 0xa75d1af0
+mac h: 0xf7ccdb
+crc_cal: 247
+crc_read: 247
+crc_test: 0
+ESP32 MAC CRC OK
+get mac res: 1
+get flash id : 0x00164020
+manufacturer_id: 0x20
+device_id: 0x4016
+Wrote 17104 bytes (11191 compressed) at 0x00001000 in 0.4 seconds (effective 343.5 kbit/s)...
+Hash of data verified.Wrote 3072 bytes (122 compressed) at 0x00008000 in 0.0 seconds (effective 510.4 kbit/s)...
+Hash of data verified.Wrote 8192 bytes (47 compressed) at 0x0000e000 in 0.1 seconds (effective 661.9 kbit/s)...
+Hash of data verified.Wrote 830656 bytes (465035 compressed) at 0x00010000 in 9.1 seconds (effective 732.9 kbit/s)...
+Hash of data verified.
+Leaving...
+com closed
+Use time: 11 s
+Download result: PASS
+*************************** END ****************************
+
+*************************** START ****************************
+START TIME: 202307291145
+CONNECT BAUD: 115200
+set state: ESP_DL_SYNC
+serial port opened
+-----------
+baud:115200
+root baud:115200
+-------------
+===============BAUD : 115200===============CALL DEVICE SYNC
+connecting...
+mac l: 0xa75d1af0
+mac h: 0xf7ccdb
+crc_cal: 247
+crc_read: 247
+crc_test: 0
+ESP32 MAC CRC OK
+get mac res: 1
+get flash id : 0x00164020
+manufacturer_id: 0x20
+device_id: 0x4016
+Wrote 17104 bytes (11191 compressed) at 0x00001000 in 0.4 seconds (effective 348.3 kbit/s)...
+Hash of data verified.Wrote 3072 bytes (122 compressed) at 0x00008000 in 0.0 seconds (effective 505.5 kbit/s)...
+Hash of data verified.Wrote 8192 bytes (47 compressed) at 0x0000e000 in 0.1 seconds (effective 671.0 kbit/s)...
+Hash of data verified.Wrote 830656 bytes (465035 compressed) at 0x00010000 in 9.0 seconds (effective 734.8 kbit/s)...
+Hash of data verified.
+Leaving...
+com closed
+Use time: 12 s
+Download result: PASS
+*************************** END ****************************
+
+*************************** START ****************************
+START TIME: 202307291154
+CONNECT BAUD: 115200
+set state: ESP_DL_SYNC
+serial port opened
+-----------
+baud:115200
+root baud:115200
+-------------
+===============BAUD : 115200===============CALL DEVICE SYNC
+connecting...
+mac l: 0xa75d1af0
+mac h: 0xf7ccdb
+crc_cal: 247
+crc_read: 247
+crc_test: 0
+ESP32 MAC CRC OK
+get mac res: 1
+get flash id : 0x00164020
+manufacturer_id: 0x20
+device_id: 0x4016
+Wrote 17104 bytes (11191 compressed) at 0x00001000 in 0.4 seconds (effective 350.5 kbit/s)...
+Hash of data verified.Wrote 3072 bytes (122 compressed) at 0x00008000 in 0.0 seconds (effective 508.8 kbit/s)...
+Hash of data verified.Wrote 8192 bytes (47 compressed) at 0x0000e000 in 0.1 seconds (effective 684.8 kbit/s)...
+Hash of data verified.Wrote 830656 bytes (465035 compressed) at 0x00010000 in 9.1 seconds (effective 729.1 kbit/s)...
+Hash of data verified.
+Leaving...
+com closed
+Use time: 12 s
+Download result: PASS
+*************************** END ****************************
+
+*************************** START ****************************
+START TIME: 202307291155
+CONNECT BAUD: 115200
+set state: ESP_DL_SYNC
+serial port opened
+-----------
+baud:115200
+root baud:115200
+-------------
+===============BAUD : 115200===============CALL DEVICE SYNC
+connecting...
+mac l: 0xa75d1af0
+mac h: 0xf7ccdb
+crc_cal: 247
+crc_read: 247
+crc_test: 0
+ESP32 MAC CRC OK
+get mac res: 1
+get flash id : 0x00164020
+manufacturer_id: 0x20
+device_id: 0x4016
+Wrote 17104 bytes (11191 compressed) at 0x00001000 in 0.4 seconds (effective 352.4 kbit/s)...
+Hash of data verified.Wrote 3072 bytes (122 compressed) at 0x00008000 in 0.0 seconds (effective 509.9 kbit/s)...
+Hash of data verified.Wrote 8192 bytes (47 compressed) at 0x0000e000 in 0.1 seconds (effective 667.6 kbit/s)...
+Hash of data verified.Wrote 830656 bytes (465035 compressed) at 0x00010000 in 9.1 seconds (effective 729.4 kbit/s)...
+Hash of data verified.
+Leaving...
+com closed
+Use time: 11 s
+Download result: PASS
+*************************** END ****************************
+
+*************************** START ****************************
+START TIME: 202307291157
+CONNECT BAUD: 115200
+set state: ESP_DL_SYNC
+serial port opened
+-----------
+baud:115200
+root baud:115200
+-------------
+===============BAUD : 115200===============CALL DEVICE SYNC
+connecting...
+mac l: 0xa75d1af0
+mac h: 0xf7ccdb
+crc_cal: 247
+crc_read: 247
+crc_test: 0
+ESP32 MAC CRC OK
+get mac res: 1
+get flash id : 0x00164020
+manufacturer_id: 0x20
+device_id: 0x4016
+Wrote 17104 bytes (11191 compressed) at 0x00001000 in 0.4 seconds (effective 342.7 kbit/s)...
+Hash of data verified.Wrote 3072 bytes (122 compressed) at 0x00008000 in 0.0 seconds (effective 511.2 kbit/s)...
+Hash of data verified.Wrote 8192 bytes (47 compressed) at 0x0000e000 in 0.1 seconds (effective 687.1 kbit/s)...
+Hash of data verified.Wrote 830656 bytes (465035 compressed) at 0x00010000 in 9.1 seconds (effective 730.3 kbit/s)...
+Hash of data verified.
+Leaving...
+com closed
+Use time: 12 s
+Download result: PASS
+*************************** END ****************************
+
